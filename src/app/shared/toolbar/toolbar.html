@@ -1,0 +1,17 @@
+<div class="content">
+    <div class="logo">
+        <h3>Formula League</h3>
+    </div>
+    <div class="toolbar">
+        <div class="nombre">
+            
+        </div>
+        <div class="menu">
+            <mat-icon matListItemIcon [matMenuTriggerFor]="menu" >account_circle</mat-icon>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="logOut()">Cerrar sesion</button>
+            </mat-menu>
+        </div>
+
+    </div>
+</div>

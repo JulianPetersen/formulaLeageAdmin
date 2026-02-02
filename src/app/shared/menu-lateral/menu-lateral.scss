@@ -1,0 +1,49 @@
+    .content {
+        width: 100%;
+        display: flex;
+        min-height: 100vh;
+
+        .menu {
+            width: 250px;
+            background-color: #313131;
+            flex-shrink: 0;
+            /* para que no se achique */
+
+
+            .buttons {
+                display: flex;
+                flex-direction: column;
+                color: white;
+                font-family: "Montserrat", sans-serif;
+
+                button {
+                    color: white;
+                    font-family: "Montserrat", sans-serif;
+                }
+            }
+        }
+
+        .menuView {
+            display: block;
+        }
+
+        .submenu {
+            margin-left: 16px;
+            display: flex;
+            flex-direction: column;
+            background-color: #d30000;
+
+            button {
+                font-size: 0.9em;
+                padding-left: 24px;
+            }
+        }
+    }
+
+
+    @media screen and (max-width: 1000px) {
+
+        .menu {
+            display: none;
+        }
+    }

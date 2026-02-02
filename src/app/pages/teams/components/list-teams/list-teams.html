@@ -1,0 +1,30 @@
+<mat-card class="team-card">
+  @for (item of AllTeams; track $index) {
+
+    <div class="team-item">
+      <div class="avatar">
+        <img [src]="item.img" alt="" />
+      </div>
+
+      <div class="team-info">
+        <div class="name">{{ item.name }}</div>
+      </div>
+
+      <div class="team-actions">
+        <button mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <button (click)="editTeam(item)" mat-icon-button >
+          <mat-icon  >edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="warn">
+          <mat-icon (click)="deleteTeam(item._id)">delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+  }
+</mat-card>

@@ -1,0 +1,50 @@
+<div class="content">
+  <div class="menu" [class.menuView]="menuService.menuView">
+    <div class="buttons">
+
+      <button mat-button [routerLink]="['/admin']">
+        Inicio
+      </button>
+
+      <!-- Botón principal con toggle para submenú -->
+      <button mat-button [routerLink]="['/teams']">
+        Equipos
+      </button>
+
+
+      <button mat-button [routerLink]="['/useradmin']">
+        Pilotos
+      </button>
+
+      <!-- Otro contenido -->
+      <button mat-button [routerLink]="['/useradmin']">
+        Administrar Usuarios
+      </button>
+
+
+
+      <button mat-button (click)="toggleCashRegisterSubmenu()">
+        Carreras
+      </button>
+
+      @if (showCashRegisterSubMenu) {
+      <div class="submenu">
+        <button mat-button [routerLink]="['/admin-caja']">
+          Agregar carrera
+        </button>
+      </div>
+
+      <div class="submenu">
+        <button mat-button [routerLink]="['/cashregister-history']">
+          Historial de carreras
+        </button>
+      </div>
+      }
+
+      <button mat-button [routerLink]="['/useradmin']">
+        Administrar Productos
+      </button>
+
+    </div>
+  </div>
+</div>

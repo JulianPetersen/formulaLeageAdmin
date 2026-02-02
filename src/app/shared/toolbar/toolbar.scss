@@ -1,0 +1,51 @@
+
+.content{
+    width: 100%;
+    display: flex;
+    background-color: #313131;
+    .logo{
+        width: 250px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Montserrat", sans-serif;
+        h3{
+            color: white;
+            font-family: "Montserrat", sans-serif;
+            margin:5px;
+        }
+        img{
+            width: 30px;
+        }
+    }
+    .toolbar{
+        flex: 1;
+        display: flex;
+        background-color: #313131;
+        justify-content: end;
+        align-items: center;
+        .menu{
+            
+                mat-icon{
+                    color: white;
+                    margin:5px
+                }
+            
+        }
+        .nombre{
+            p{
+                color:white;
+                font-size: 15px;
+            }
+        }
+    }
+}
+
+
+
+@media screen and (max-width: 1000px) {
+
+    .content{
+        display: none;
+    }
+}

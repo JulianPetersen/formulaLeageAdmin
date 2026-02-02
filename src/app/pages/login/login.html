@@ -1,0 +1,31 @@
+<div class="login-wrapper">
+  <mat-card class="card">
+    <h2>Admin Login</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" />
+      </mat-form-field>
+
+      @if (error) {
+        <p class="error-msg">{{ error }}</p>
+      }
+
+      <button mat-raised-button color="primary" class="full" [disabled]="loading || form.invalid">
+        Ingresar
+      </button>
+
+      @if (loading) {
+        <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+      }
+
+    </form>
+  </mat-card>
+</div>

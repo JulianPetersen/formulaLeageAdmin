@@ -1,0 +1,32 @@
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .card {
+    width: 350px;
+    padding: 25px;
+
+    h2 {
+      margin-bottom: 20px;
+    }
+  }
+
+  .full {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .error {
+    color: #d9534f;
+    margin-top: 10px;
+  }
+
+  .error-msg {
+  color: red;
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+}
