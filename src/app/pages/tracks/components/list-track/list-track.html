@@ -1,0 +1,35 @@
+<mat-card class="track-card">
+  @if (allTracks$ | async; as allTrack) {
+
+  @for (item of allTrack; track item._id) {
+
+  <div class="track-item">
+
+    <div class="avatar">
+      <img [src]="item.img" alt="" />
+    </div>
+
+    <div class="track-info">
+      <div class="name">{{ item.name }}</div>
+    </div>
+
+
+
+
+    <div class="track-actions">
+
+      <button (click)="editTrack(item)" mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button color="warn" (click)="deleteTrack(item._id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+  <mat-divider></mat-divider>
+  }
+  }
+</mat-card>

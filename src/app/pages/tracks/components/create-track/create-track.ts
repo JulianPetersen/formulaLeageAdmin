@@ -1,41 +1,40 @@
-import { Component } from '@angular/core';
-import { MenuLateral } from '../../../../shared/menu-lateral/menu-lateral';
-import { Header } from '../../../../shared/header/header';
 import { CommonModule } from '@angular/common';
-import { Toolbar } from '../../../../shared/toolbar/toolbar';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TeamsService } from '../../../../services/teams';
+import { TrackService } from '../../../../services/track-service';
 
 @Component({
-  selector: 'app-form-create-team',
+  selector: 'app-create-track',
   imports: [ CommonModule, ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
     MatCardModule,
     MatProgressSpinnerModule],
-  templateUrl: './form-create-team.html',
-  styleUrl: './form-create-team.scss',
+  templateUrl: './create-track.html',
+  styleUrl: './create-track.scss',
 })
-export class FormCreateTeam {
+export class CreateTrack {
 
-
-  loading = false;
+    loading = false;
   preview: string | null = null;
 
   form!: FormGroup;
 
 
 
-  constructor(public teamService:TeamsService,private fb: FormBuilder,){
+  constructor(public trackService:TrackService,private fb: FormBuilder,){
     this.form = this.fb.group({
     name: ['', Validators.required],
+    country:['', Validators.required],
     img: [null]
   });
 }
+
+
 
 
 
@@ -50,6 +49,8 @@ onFileSelected(event: any) {
     reader.readAsDataURL(file);
   }
 
+
+
   onSubmit() {
     if (this.form.invalid) return;
 
@@ -61,20 +62,18 @@ onFileSelected(event: any) {
 
     this.loading = true;
 
-    this.teamService.createTeam(formData)
+    this.trackService.ceateTrack(formData)
       .subscribe({
         next: () => {
           this.loading = false;
-          alert('Equipo creado!');
           this.form.reset();
           this.preview = null;
-          this.teamService.notifyManagmentAdded()
+          this.trackService.notifyManagmentAdded()
         },
         error: () => {
           this.loading = false;
         }
       });
   }
-
 
 }

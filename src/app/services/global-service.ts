@@ -6,6 +6,9 @@ import { AlertComponent } from '../shared/ui/alert/alert';
   providedIn: 'root',
 })
 export class GlobalService {
+
+  public api = 'http://localhost:4000';
+
   constructor(public dialog: MatDialog, @Inject(PLATFORM_ID) private platformId: Object) {
 
   }

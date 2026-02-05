@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Teams } from '../pages/teams/teams';
 import { TeamsModel } from '../models/teams';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +11,9 @@ export class TeamsService {
   private api = 'http://localhost:4000';
 
   constructor(private http: HttpClient) { }
+
+  private teamsAddedSource = new Subject<void>();
+  teamsAdded$ = this.teamsAddedSource.asObservable(); // <-- observable público
 
   getToken(): string | null {
 
@@ -42,11 +45,15 @@ export class TeamsService {
     return this.http.delete(`${this.api}/api/teams/${id}`, { headers })
   }
 
-  updateTeam(formData: FormData,id:string){
+  updateTeam(formData: FormData, id: string) {
     const token = this.getToken();
     const headers = new HttpHeaders({
       'authorization': `Bearer ${token}` || '',
     });
     return this.http.patch(`${this.api}/api/teams/${id}`, formData, { headers });
+  }
+
+  notifyManagmentAdded() {
+    this.teamsAddedSource.next();
   }
 }

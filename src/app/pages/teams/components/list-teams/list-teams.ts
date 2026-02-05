@@ -9,17 +9,20 @@ import { GlobalService } from '../../../../services/global-service';
 
 import { UpdateTeam } from '../update-team/update-team';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-list-teams',
-  imports: [MatCardModule,MatIcon,MatButtonModule,MatDivider],
+  imports: [MatCardModule,MatIcon,MatButtonModule,MatDivider,CommonModule],
   templateUrl: './list-teams.html',
   styleUrl: './list-teams.scss',
 })
 export class ListTeams {
 
   AllTeams:TeamsModel[] = [] 
+  private subscription: Subscription
 
   constructor(private teamService:TeamsService,
               private cdr: ChangeDetectorRef, 
@@ -30,6 +33,11 @@ export class ListTeams {
 
   ngOnInit(){
     this.getAllTeams()
+
+    this.subscription  = this.teamService.teamsAdded$.subscribe(() => {
+      this.getAllTeams()
+    });
+    
   }
 
 

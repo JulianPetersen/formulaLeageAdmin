@@ -1,0 +1,39 @@
+<mat-card class="pilot-card">
+  @if (allPilots$ | async; as allPilots) {
+
+    @for (item of allPilots; track item._id) {
+
+      <div class="pilot-item">
+
+        <div class="avatar">
+          <img [src]="item.img" alt="" />
+        </div>
+
+        <div class="pilot-info">
+          <div class="name">{{ item.name }}</div>
+        </div>
+
+        <div class="team">
+                  <div class="avatar">
+          <img [src]="item.team.img" alt="" />
+        </div>
+        </div>
+
+
+        <div class="pilot-actions">
+
+          <button (click)="editPilot(item)" mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button mat-icon-button color="warn" (click)="deletePilot(item._id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+      </div>
+
+      <mat-divider></mat-divider>
+    }
+  }
+</mat-card>

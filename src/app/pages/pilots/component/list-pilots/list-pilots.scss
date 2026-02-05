@@ -1,0 +1,41 @@
+.pilot-card {
+  width: 500px;
+  margin: 0 auto;
+  padding: 0;
+
+}
+
+.pilot-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  height: 64px;
+}
+
+.avatar img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pilot-info {
+  flex: 1;
+  padding-left: 16px;
+}
+
+.team {
+  flex: 1;
+  padding-left: 16px;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.pilot-actions {
+  display: flex;
+  gap: 4px;
+}
+  
