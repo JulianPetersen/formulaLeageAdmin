@@ -56,6 +56,7 @@ onFileSelected(event: any) {
 
     const formData = new FormData();
     formData.append('name', this.form.value.name!);
+    formData.append('country', this.form.value.country!);
     if (this.form.value.img) {
       formData.append('img', this.form.value.img);
     }

@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  
+}
+
+mat-card{
+  max-height: 600px;
+  padding: 15px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+mat-form-field {
+  flex: 1;
+}
+
+.error {
+  color: #d32f2f;
+  margin: 8px 0;
+}

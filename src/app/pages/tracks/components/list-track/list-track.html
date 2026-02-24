@@ -4,20 +4,18 @@
   @for (item of allTrack; track item._id) {
 
   <div class="track-item">
-
     <div class="avatar">
       <img [src]="item.img" alt="" />
     </div>
 
     <div class="track-info">
-      <div class="name">{{ item.name }}</div>
+      <div class="name">{{ item.country }}</div>
     </div>
 
 
 
 
     <div class="track-actions">
-
       <button (click)="editTrack(item)" mat-icon-button>
         <mat-icon>edit</mat-icon>
       </button>
@@ -26,7 +24,6 @@
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-
   </div>
 
   <mat-divider></mat-divider>

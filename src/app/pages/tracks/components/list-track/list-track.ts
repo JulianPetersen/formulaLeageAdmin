@@ -46,6 +46,7 @@ export class ListTrack {
     this.subscription  = this.TrackService.tracksAdded$.subscribe(() => {
      this.refresh$.next()
     });
+    
   }
 
 

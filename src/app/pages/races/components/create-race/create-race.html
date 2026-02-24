@@ -1,0 +1,61 @@
+<mat-card class="card">
+  <h2>Crear Carrera</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Circuito</mat-label>
+       <mat-select formControlName="circuit">
+    @for (track of tracks; track track._id) {
+      <mat-option [value]="track._id">
+        {{ track.name }}
+      </mat-option>
+    }
+  </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Fecha de carrera</mat-label>
+      <input matInput type="datetime-local" formControlName="date" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>pronosticos permitidos hasta</mat-label>
+      <input matInput type="datetime-local" formControlName="cutoff" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Pilotos</mat-label>
+      <mat-select multiple formControlName="pilots">
+    @for (pilot of pilots; track pilot._id) {
+      <mat-option [value]="pilot._id">
+        {{ pilot.name }}
+      </mat-option>
+    }
+  </mat-select>
+    </mat-form-field>
+
+    @if (error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="full"
+      [disabled]="loading || form.invalid"
+    >
+      Crear Carrera
+    </button>
+
+    @if (loading) {
+      <mat-progress-spinner diameter="30" mode="indeterminate"></mat-progress-spinner>
+    }
+
+  </form>
+</mat-card>

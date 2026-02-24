@@ -1,0 +1,52 @@
+<mat-card class="card">
+
+  @for (race of races$ | async; track race._id) {
+    <mat-card class="race-card">
+
+      <div class="row">
+        <div>
+          <h3>{{ race.name }}</h3>
+          <p>{{ race.circuit?.name || race.circuit }}</p>
+          <p>{{ race.date | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+
+        <mat-chip
+          [color]="
+            race.status === 'proximamente' ? 'primary' :
+            race.status === 'cerrada' ? 'warn' :
+            'accent'
+          "
+          selected
+        >
+          {{ race.status }}
+        </mat-chip>
+      </div>
+
+      <div class="actions">
+        @if (race.status === 'proximamente') {
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="changeStatusToLista(race._id)"
+          >
+            Pasar a Lista
+          </button>
+        }
+      </div>
+
+      <div class="actions">
+        @if (race.status === 'lista') {
+          <button
+            mat-stroked-button
+            color="warn"
+            (click)="closeRace(race)"
+          >
+            cerrar carrera
+          </button>
+        }
+      </div>
+
+    </mat-card>
+  }
+
+</mat-card>

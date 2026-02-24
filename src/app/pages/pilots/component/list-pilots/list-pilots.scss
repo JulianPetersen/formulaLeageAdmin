@@ -2,7 +2,9 @@
   width: 500px;
   margin: 0 auto;
   padding: 0;
-
+  max-height: 550px;
+  overflow-y: auto;
+  margin-left: 15px;
 }
 
 .pilot-item {

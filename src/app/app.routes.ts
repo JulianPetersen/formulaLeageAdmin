@@ -7,5 +7,6 @@ export const routes: Routes = [
     { path: 'teams', canActivate: [authGuard], loadComponent: () => import('./pages/teams/teams').then(c => c.Teams) },
     { path: 'pilots', canActivate: [authGuard], loadComponent: () => import('./pages/pilots/pilots').then(c => c.Pilots) },
     { path: 'tracks', canActivate: [authGuard], loadComponent: () => import('./pages/tracks/tracks').then(c => c.Tracks) },
+    { path: 'races', canActivate: [authGuard], loadComponent: () => import('./pages/races/races').then(c => c.Races) },
     { path: 'login', loadComponent: () => import('./pages/login/login').then(m => m.Login) },
 ];
