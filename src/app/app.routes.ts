@@ -8,5 +8,6 @@ export const routes: Routes = [
     { path: 'pilots', canActivate: [authGuard], loadComponent: () => import('./pages/pilots/pilots').then(c => c.Pilots) },
     { path: 'tracks', canActivate: [authGuard], loadComponent: () => import('./pages/tracks/tracks').then(c => c.Tracks) },
     { path: 'races', canActivate: [authGuard], loadComponent: () => import('./pages/races/races').then(c => c.Races) },
+    { path: 'prizes', canActivate: [authGuard], loadComponent: () => import('./pages/prizes-page/prizes-page').then(c => c.PrizesPage) },
     { path: 'login', loadComponent: () => import('./pages/login/login').then(m => m.Login) },
 ];

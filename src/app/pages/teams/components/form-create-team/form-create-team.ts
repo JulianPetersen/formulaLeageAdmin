@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { MenuLateral } from '../../../../shared/menu-lateral/menu-lateral';
-import { Header } from '../../../../shared/header/header';
 import { CommonModule } from '@angular/common';
-import { Toolbar } from '../../../../shared/toolbar/toolbar';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';

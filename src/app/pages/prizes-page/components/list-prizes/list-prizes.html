@@ -1,0 +1,47 @@
+<mat-card class="card">
+
+  @for (prize of prizes$ | async; track prize._id) {
+  <mat-card class="race-card">
+     
+    <div class="row">
+      <div>
+        <h3>{{ prize.amount }}</h3>
+        <p>{{ prize.endDate| date:'dd/MM/yyyy HH:mm' }}</p>
+      </div>
+
+      <mat-chip [color]="
+            prize.status === 'proximamente' ? 'primary' :
+            prize.status === 'cerrada' ? 'warn' :
+            'accent'
+          " selected>
+        {{ prize.status }}
+      </mat-chip>
+    </div>
+
+    <div class="actions">
+      @if (prize.status === 'proximamente') {
+      <button mat-stroked-button color="warn" (click)="changeStatusToActive(prize._id)">
+        Activar Premio
+      </button>
+      }
+    </div>
+
+    <div class="actions">
+      @if (prize.status === 'activo') {
+      <button mat-stroked-button color="warn" (click)="changeStatusToCLose(prize._id)">
+        Finalizar Premio
+      </button>
+
+       <button (click)="editPrize(prize)" mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+      }
+    </div>
+
+
+  </mat-card>
+  }
+
+
+
+</mat-card>
