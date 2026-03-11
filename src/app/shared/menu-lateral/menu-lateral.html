@@ -2,57 +2,75 @@
   <div class="menu" [class.menuView]="menuService.menuView">
     <div class="buttons">
 
-      <button mat-button [routerLink]="['/admin']">
+      <button mat-button routerLink="/admin" routerLinkActive="active">
         Inicio
       </button>
 
-      <!-- Botón principal con toggle para submenú -->
-      <button mat-button [routerLink]="['/teams']">
+      <button mat-button routerLink="/teams" routerLinkActive="active">
         Equipos
       </button>
 
-
-      <button mat-button [routerLink]="['/pilots']">
+      <button mat-button routerLink="/pilots" routerLinkActive="active">
         Pilotos
       </button>
 
-      
-      <button mat-button [routerLink]="['/prizes']">
+      <button mat-button routerLink="/prizes" routerLinkActive="active">
         Premios
       </button>
 
-      <button mat-button [routerLink]="['/tracks']">
+      <button mat-button routerLink="/tracks" routerLinkActive="active">
         Circuitos
       </button>
 
-      <!-- Otro contenido -->
-      <button mat-button [routerLink]="['/useradmin']">
+      <button mat-button routerLink="/useradmin" routerLinkActive="active">
         Administrar Usuarios
       </button>
 
-      <button mat-button [routerLink]="['/blog']">
-        Blog
-      </button>
+      <!-- CARRERAS -->
 
       <button mat-button (click)="toggleCashRegisterSubmenu()">
         Carreras
       </button>
 
       @if (showCashRegisterSubMenu) {
+
       <div class="submenu">
-        <button mat-button [routerLink]="['/races']">
+        <button mat-button routerLink="/races" routerLinkActive="active">
           Agregar carrera
         </button>
       </div>
 
       <div class="submenu">
-        <button mat-button [routerLink]="['/cashregister-history']">
+        <button mat-button routerLink="/cashregister-history" routerLinkActive="active">
           Historial de carreras
         </button>
       </div>
+
       }
 
-      <button mat-button [routerLink]="['/useradmin']">
+      <!-- BLOG -->
+
+      <button mat-button (click)="toggleBlog()">
+        Blog
+      </button>
+
+      @if (showBlogSubMenu) {
+
+      <div class="submenu">
+        <button mat-button routerLink="/blog" routerLinkActive="active">
+          Crear Noticia
+        </button>
+      </div>
+
+      <div class="submenu">
+        <button mat-button routerLink="/list-news" routerLinkActive="active">
+          Lista de noticias
+        </button>
+      </div>
+
+      }
+
+      <button mat-button routerLink="/products" routerLinkActive="active">
         Administrar Productos
       </button>
 

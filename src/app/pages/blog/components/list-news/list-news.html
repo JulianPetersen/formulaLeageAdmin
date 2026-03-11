@@ -1,0 +1,96 @@
+<app-header />
+<app-toolbar />
+
+<div class="content">
+
+  <app-menu-lateral />
+
+  <div class="contenedor">
+
+    <!-- CABECERA DE TABLA -->
+    <div class="table-header">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar blog</mat-label>
+        <input
+          matInput
+          placeholder="Buscar por título..."
+          (keyup)="applyFilter($event)"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- CONTENIDO SCROLLEABLE -->
+    <div class="table-wrapper">
+
+      <table mat-table [dataSource]="pagedBlogs$ | async">
+
+        <!-- TITULO -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Título</th>
+          <td mat-cell *matCellDef="let blog">
+            {{ blog.title }}
+          </td>
+        </ng-container>
+
+        <!-- ESTADO -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let blog">
+
+            <mat-chip *ngIf="blog.published" color="primary">
+              Publicado
+            </mat-chip>
+
+            <mat-chip *ngIf="!blog.published">
+              Borrador
+            </mat-chip>
+
+          </td>
+        </ng-container>
+
+        <!-- FECHA -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let blog">
+            {{ blog.createdAt | date:'short' }}
+          </td>
+        </ng-container>
+
+        <!-- ACCIONES -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let blog">
+
+            <button mat-button (click)="togglePublish(blog)">
+              {{ blog.published ? 'Despublicar' : 'Publicar' }}
+            </button>
+
+            <button mat-button color="primary" (click)="edit(blog)">
+              Editar
+            </button>
+
+                     <button mat-button color="primary" (click)="delete(blog)">
+              Eliminar
+            </button>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+      <mat-paginator
+        [length]="(blogs$ | async)?.length || 0"
+        [pageSize]="20"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+
+    </div>
+
+  </div>
+
+</div>

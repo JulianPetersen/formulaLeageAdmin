@@ -1,0 +1,28 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.content {
+  display: flex;
+  height: calc(100vh - 120px);
+}
+
+.contenedor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* buscador */
+.table-header {
+  margin-bottom: 15px;
+}
+
+/* area con scroll */
+.table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+}

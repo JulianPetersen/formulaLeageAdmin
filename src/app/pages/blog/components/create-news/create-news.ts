@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { MenuLateral } from '../../shared/menu-lateral/menu-lateral';
-import { Header } from '../../shared/header/header';
 import { CommonModule } from '@angular/common';
-import { Toolbar } from '../../shared/toolbar/toolbar';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,14 +8,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { BlogService } from '../../services/blog-service';
+import { BlogService } from '../../../../services/blog-service';
 
 @Component({
-  selector: 'app-blog-page',
+  selector: 'app-create-news',
   imports: [
-    MenuLateral,
-    Header,
-    Toolbar,
     CommonModule,
     ReactiveFormsModule,
     CKEditorModule,
@@ -29,10 +23,10 @@ import { BlogService } from '../../services/blog-service';
     MatCheckboxModule,
     MatButtonModule
   ],
-  templateUrl: './blog-page.html',
-  styleUrl: './blog-page.scss',
+  templateUrl: './create-news.html',
+  styleUrl: './create-news.scss',
 })
-export class BlogPage {
+export class createBlog {
 
 
 
