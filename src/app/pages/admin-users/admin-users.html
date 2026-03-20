@@ -1,0 +1,10 @@
+<app-header />
+<app-toolbar />
+
+<div class="content">
+  <app-menu-lateral [ngClass]="" />
+
+  <div class="contenedor">
+     <app-search-user (searchChange)="onSearch($event)"></app-search-user>
+      <app-list-users [search]="searchTerm"></app-list-users>
+</div>

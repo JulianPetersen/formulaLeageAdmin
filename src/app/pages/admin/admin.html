@@ -1,8 +1,52 @@
 <app-header></app-header>
 <app-toolbar></app-toolbar>
 <div class="content">
-    <app-menu-lateral [ngClass]=""></app-menu-lateral>
-    <div class="contenedor"> 
-         
+  <app-menu-lateral [ngClass]=""></app-menu-lateral>
+  <div class="contenedor">
+    <div class="dashboard">
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <p class="label">Usuarios</p>
+          <h2>1,245</h2>
+        </div>
+
+        <div class="stat-card">
+          <p class="label">Predicciones</p>
+          <h2>8,932</h2>
+        </div>
+
+        <div class="stat-card">
+          <p class="label">Carreras</p>
+          <h2>12</h2>
+        </div>
+
+        <div class="stat-card highlight">
+          <p class="label">Hoy</p>
+          <h2>342</h2>
+        </div>
+
+      </div>
+
     </div>
+
+    <div class="top-users-card">
+      <h3>Top usuarios</h3>
+
+      <div class="user" *ngFor="let user of topUsers">
+        <span>{{ user.name }}</span>
+        <strong>{{ user.points }}</strong>
+      </div>
+
+    </div>
+
+
+
+    <div class="next-race">
+  <h3>Próxima carrera</h3>
+  <p>Monza</p>
+  <span class="countdown">02:14:33</span>
+</div>
+  </div>
 </div>

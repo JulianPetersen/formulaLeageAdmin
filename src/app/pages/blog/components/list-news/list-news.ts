@@ -136,7 +136,6 @@ export class ListNews {
 
     })
 
-
   }
 
   applyFilter(event: any) {

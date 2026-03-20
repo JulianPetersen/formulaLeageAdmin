@@ -12,4 +12,12 @@ import { Toolbar } from "../../shared/toolbar/toolbar";
 })
 export class Admin {
 
+  topUsers:any[] = [
+    {name:'julian', points:'100'},
+    {name:'Rocco', points:'100'},
+    {name:'Analia', points:'100'},
+    {name:'Daniel', points:'100'},
+    {name:'Daiana', points:'100'}
+
+  ]
 }
