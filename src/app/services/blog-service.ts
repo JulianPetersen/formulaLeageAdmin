@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { BlogModel } from '../models/blog';
+import { GlobalService } from './global-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BlogService {
 
-  private api = 'http://localhost:4000';
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private global:GlobalService) {}
 
   private blogAddedSource = new Subject<void>();
   blogAdded$ = this.blogAddedSource.asObservable();
@@ -30,31 +29,31 @@ export class BlogService {
   createBlog(data: BlogModel) {
     const headers = this.getHeaders();
 
-    return this.http.post(`${this.api}/api/blog`, data, { headers });
+    return this.http.post(`${this.global.api}/api/blog`, data, { headers });
   }
 
   getAllBlogs() {
     const headers = this.getHeaders();
 
-    return this.http.get<BlogModel[]>(`${this.api}/api/blog`, { headers });
+    return this.http.get<BlogModel[]>(`${this.global.api}/api/blog`, { headers });
   }
 
   getBlogById(id: string) {
     const headers = this.getHeaders();
 
-    return this.http.get<BlogModel>(`${this.api}/api/blog/${id}`, { headers });
+    return this.http.get<BlogModel>(`${this.global.api}/api/blog/${id}`, { headers });
   }
 
   deleteBlog(id: string) {
     const headers = this.getHeaders();
 
-    return this.http.delete(`${this.api}/api/blog/${id}`, { headers });
+    return this.http.delete(`${this.global.api}/api/blog/${id}`, { headers });
   }
 
   updateBlog(data: BlogModel, id: string) {
     const headers = this.getHeaders();
 
-    return this.http.patch(`${this.api}/api/blog/${id}`, data, { headers });
+    return this.http.patch(`${this.global.api}/api/blog/${id}`, data, { headers });
   }
 
   uploadImage(file: File) {
@@ -64,7 +63,7 @@ export class BlogService {
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post(`${this.api}/api/blog/upload`, formData, { headers });
+    return this.http.post(`${this.global.api}/api/blog/upload`, formData, { headers });
   }
 
   notifyBlogAdded() {
@@ -75,6 +74,6 @@ export class BlogService {
 getBlogBySlug(slug: string) {
   const headers = this.getHeaders();
 
-  return this.http.get<BlogModel>(`${this.api}/api/blog/slug/${slug}`, { headers });
+  return this.http.get<BlogModel>(`${this.global.api}/api/blog/slug/${slug}`, { headers });
 }
 }

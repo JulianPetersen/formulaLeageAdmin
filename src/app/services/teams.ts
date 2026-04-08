@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TeamsModel } from '../models/teams';
 import { Subject } from 'rxjs';
+import { GlobalService } from './global-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TeamsService {
 
-  private api = 'http://localhost:4000';
 
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient, private global:GlobalService) { }
 
   private teamsAddedSource = new Subject<void>();
   teamsAdded$ = this.teamsAddedSource.asObservable(); // <-- observable público
@@ -26,7 +27,7 @@ export class TeamsService {
     const headers = new HttpHeaders({
       'authorization': `Bearer ${token}` || '',
     });
-    return this.http.post(`${this.api}/api/teams`, formData, { headers });
+    return this.http.post(`${this.global.api}/api/teams`, formData, { headers });
   }
 
   getAllTeams() {
@@ -34,7 +35,7 @@ export class TeamsService {
     const headers = new HttpHeaders({
       'authorization': `Bearer ${token}` || '',
     });
-    return this.http.get<TeamsModel[]>(`${this.api}/api/teams`, { headers });
+    return this.http.get<TeamsModel[]>(`${this.global.api}/api/teams`, { headers });
   }
 
   deleteTeam(id: string) {
@@ -42,7 +43,7 @@ export class TeamsService {
     const headers = new HttpHeaders({
       'authorization': `Bearer ${token}` || '',
     });
-    return this.http.delete(`${this.api}/api/teams/${id}`, { headers })
+    return this.http.delete(`${this.global.api}/api/teams/${id}`, { headers })
   }
 
   updateTeam(formData: FormData, id: string) {
@@ -50,7 +51,7 @@ export class TeamsService {
     const headers = new HttpHeaders({
       'authorization': `Bearer ${token}` || '',
     });
-    return this.http.patch(`${this.api}/api/teams/${id}`, formData, { headers });
+    return this.http.patch(`${this.global.api}/api/teams/${id}`, formData, { headers });
   }
 
   notifyManagmentAdded() {

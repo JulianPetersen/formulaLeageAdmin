@@ -7,7 +7,13 @@ import { AlertComponent } from '../shared/ui/alert/alert';
 })
 export class GlobalService {
 
-  public api = 'http://localhost:4000';
+
+  //Desarrollo
+  // public api = 'http://localhost:4000';
+
+  //produccion
+  public api = 'https://formulaleague.site';
+
 
   constructor(public dialog: MatDialog, @Inject(PLATFORM_ID) private platformId: Object) {
 
