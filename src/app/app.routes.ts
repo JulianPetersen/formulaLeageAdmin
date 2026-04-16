@@ -20,5 +20,6 @@ export const routes: Routes = [
     {
         path: 'verify',
         component: Verify
-    }
+    },
+     { path: 'termsandcondtions', loadComponent: () => import('./pages/terms-conditions/terms-conditions').then(m => m.TermsConditions) },
 ];

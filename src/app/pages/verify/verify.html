@@ -1,1 +1,7 @@
 <h1>{{ message }}</h1>
+@if(showResend){
+<div>
+    <input [(ngModel)]="email" placeholder="Ingresá tu email" />
+    <button (click)="resend()">Reenviar verificación</button>
+</div>
+}
