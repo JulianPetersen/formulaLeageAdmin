@@ -17,8 +17,11 @@
 
         <div class="acciones">
 
-            <mat-checkbox formControlName="published"> 
+            <mat-checkbox formControlName="published">
                 Publicar
+            </mat-checkbox>
+            <mat-checkbox formControlName="notify" [disabled]="!form.get('published')?.value">
+                Enviar notificación
             </mat-checkbox>
 
             <button mat-raised-button color="primary">

@@ -30,7 +30,7 @@ export class createBlog {
 
 
 
- public editorConfig = {
+  public editorConfig = {
     toolbar: [
       'heading',
       '|',
@@ -49,11 +49,11 @@ export class createBlog {
     ]
   };
   toolbar: [
-    'undo','redo',
+    'undo', 'redo',
     '|',
     'heading',
     '|',
-    'bold','italic',
+    'bold', 'italic',
     '|',
     'link',
     'insertTable',
@@ -79,64 +79,71 @@ export class createBlog {
   form!: FormGroup;
 
 
-  constructor(private fb: FormBuilder, private blogService:BlogService) {
+  constructor(private fb: FormBuilder, private blogService: BlogService) {
 
     this.form = this.fb.group({
       title: ['', Validators.required],
       summary: ['', Validators.required],
       content: ['', Validators.required],
-      published: [false]
+      published: [false],
+      notify: [false]
+    });
+
+    this.form.get('published')?.valueChanges.subscribe(value => {
+      if (!value) {
+        this.form.get('notify')?.setValue(false);
+      }
     });
 
   }
 
 
 
-save() {
+  save() {
 
-  if (this.form.invalid) return;
+    if (this.form.invalid) return;
 
-  const blog = this.form.value;
+    const blog = this.form.value;
 
-  this.blogService.createBlog(blog).subscribe({
-    next: () => {
+    this.blogService.createBlog(blog).subscribe({
+      next: () => {
 
-      console.log('noticia creada');
+        console.log('noticia creada');
 
-      this.blogService.notifyBlogAdded();
+        this.blogService.notifyBlogAdded();
 
-      this.form.reset();
+        this.form.reset();
 
-    },
-    error: (err) => {
-      console.error(err);
-    }
-  });
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
 
-}
+  }
 
 
   onReady(editor: any) {
 
-  editor.plugins.get("FileRepository").createUploadAdapter = (loader: any) => {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader: any) => {
 
-    return {
-      upload: async () => {
+      return {
+        upload: async () => {
 
-        const file = await loader.file;
+          const file = await loader.file;
 
-        const response: any = await this.blogService.uploadImage(file).toPromise();
+          const response: any = await this.blogService.uploadImage(file).toPromise();
 
-        return {
-          default: response.url
-        };
+          return {
+            default: response.url
+          };
 
-      }
+        }
+      };
+
     };
 
-  };
-
-}
+  }
 
 }
 
