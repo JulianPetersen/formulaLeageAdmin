@@ -47,7 +47,8 @@ export class UpdatePilotComponent {
       number: [null, Validators.required],
       img: [null],
       team: ['', Validators.required],
-      country:['', Validators.required]
+      country:['', Validators.required],
+      tournamentPoints: [null, Validators.required],
     });
     console.log('la data del piloto es', this.data)
       this.getAllTeams();
@@ -61,6 +62,7 @@ export class UpdatePilotComponent {
     img: [null],
     team:[this.data.team._id, Validators.required],
     country:[this.data.country, Validators.required],
+    tournamentPoints: [this.data.tournamentPoints],
   });
 
   this.preview = this.data.img;
@@ -103,6 +105,7 @@ export class UpdatePilotComponent {
     formData.append('number', this.form.value.number!);
     formData.append('team', this.form.value.team!);
     formData.append('country', this.form.value.country!);
+    formData.append('tournamentPoints', this.form.value.tournamentPoints!);
     this.loading = true;
 
     this.pilotService.updatePilot(formData,this.data._id)

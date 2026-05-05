@@ -9,10 +9,10 @@ export class GlobalService {
 
 
   //Desarrollo
-  // public api = 'http://localhost:4000';
+  public api = 'http://localhost:4000';
 
   //produccion
-  public api = 'https://formulaleague.site';
+  // public api = 'https://formulaleague.site';
 
 
   constructor(public dialog: MatDialog, @Inject(PLATFORM_ID) private platformId: Object) {

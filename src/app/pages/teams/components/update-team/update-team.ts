@@ -35,7 +35,8 @@ export class UpdateTeam {
 
     this.form = this.fb.group({
       name: ['', Validators.required],
-      img: [null]
+      img: [null],
+      tournamentPoints: [null]
     });
 
       console.log(this.data);
@@ -44,7 +45,8 @@ export class UpdateTeam {
 ngOnInit() {
   this.form = this.fb.group({
     name: [this.data.name, Validators.required],
-    img: [null]
+    img: [null],
+    tournamentPoints:[this.data.tournamentPoints]
   });
 
   this.preview = this.data.img;
@@ -66,6 +68,7 @@ ngOnInit() {
 
     const formData = new FormData();
     formData.append('name', this.form.value.name!);
+    formData.append('tournamentPoints', this.form.value.tournamentPoints!);
     if (this.form.value.img) {
       formData.append('img', this.form.value.img);
     }
