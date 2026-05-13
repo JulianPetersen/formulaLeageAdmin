@@ -9,6 +9,9 @@ import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
 import { RaceModel } from '../../../../models/race';
 import { MatDialog } from '@angular/material/dialog';
 import { CloseRace } from '../close-race/close-race';
+import { MatIcon } from '@angular/material/icon';
+import { TracksModel } from '../../../../models/tracks';
+import { EditRaceComponent } from '../edit-race/edit-race';
 
 @Component({
   selector: 'app-list-races-component',
@@ -16,7 +19,8 @@ import { CloseRace } from '../close-race/close-race';
     CommonModule,
     MatCard,
     MatButtonModule,
-    MatChip
+    MatChip,
+    MatIcon
   ],
   templateUrl: './list-races-component.html',
   styleUrl: './list-races-component.scss',
@@ -66,5 +70,22 @@ closeRace(race: RaceModel) {
   refresh() {
     this.refresh$.next();
   }
+
+
+  editRace(race:RaceModel){
+      const dialog = this.dialog.open(EditRaceComponent, {
+        width: '500px',
+        data: race
+      });
+    
+      dialog.afterClosed().subscribe((res:any) => {
+        console.log('la res es',res)
+        if (res === 'updated') {
+           this.refresh$.next();
+        }
+      });
+  }
+
+
 }
 

@@ -58,12 +58,21 @@ export class RacesService {
   }
 
   updateRaceStatus(id: string, status: string): Observable<RaceModel> {
-        const token = this.getToken();
-
+    const token = this.getToken();
     const headers = new HttpHeaders({
       authorization: `Bearer ${token}`
     });
 
     return this.http.patch<RaceModel>(`${this.global.api}/api/race/${id}`, { status },{ headers });
   }
+
+
+    updrateRace(id:string, data: RaceModel){
+      const token = this.getToken()
+      const headers = new HttpHeaders({
+        'authorization': `Bearer ${token}` || '',
+      });
+  
+      return this.http.patch(`${this.global.api}/api/race/${id}`,data,{ headers });
+    }
 }
