@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-menu-lateral',
@@ -22,7 +23,8 @@ export class MenuLateral {
 
   constructor(
     public menuService: MenuService,
-    private router: Router
+    private router: Router,
+    private auth:AuthService
   ) {}
 
   showCashRegisterSubMenu = false;
@@ -60,4 +62,8 @@ export class MenuLateral {
 
   }
 
+
+  logOut(){
+    this.auth.logout();
+  }
 }

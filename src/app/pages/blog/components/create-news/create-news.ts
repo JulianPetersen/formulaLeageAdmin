@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { BlogService } from '../../../../services/blog-service';
+import { AuthService } from '../../../../services/auth';
 
 @Component({
   selector: 'app-create-news',
@@ -79,7 +80,7 @@ export class createBlog {
   form!: FormGroup;
 
 
-  constructor(private fb: FormBuilder, private blogService: BlogService) {
+  constructor(private fb: FormBuilder, private blogService: BlogService,private auth:AuthService) {
 
     this.form = this.fb.group({
       title: ['', Validators.required],
@@ -117,6 +118,9 @@ export class createBlog {
       },
       error: (err) => {
         console.error(err);
+         if(err.status == 401){  
+            this.auth.logout()
+          }
       }
     });
 

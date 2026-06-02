@@ -3,6 +3,8 @@ import { MenuLateral } from "../../shared/menu-lateral/menu-lateral";
 import { Header } from "../../shared/header/header";
 import { CommonModule } from '@angular/common';
 import { Toolbar } from "../../shared/toolbar/toolbar";
+import { AuthService } from '../../services/auth';
+import { UsersService } from '../../services/users';
 
 @Component({
   selector: 'app-admin',
@@ -20,4 +22,25 @@ export class Admin {
     {name:'Daiana', points:'100'}
 
   ]
+
+
+  constructor( private user:UsersService, private auth:AuthService){
+     this.getInfoUser()
+  }
+
+
+  getInfoUser(){
+    this.user.getUserById()
+      .subscribe({
+        next :((res) => {
+          console.log(res)
+        }),
+        error: (err) => {
+          console.log(err)
+          if(err.status == 401){  
+            this.auth.logout()
+          }
+        }
+      })
+  }
 }

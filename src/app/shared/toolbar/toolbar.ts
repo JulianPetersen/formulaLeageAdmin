@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-toolbar',
@@ -12,7 +13,7 @@ export class Toolbar {
 
 
 
-  constructor(
+  constructor( private auth:AuthService
   ) {
 
   }
@@ -24,6 +25,6 @@ export class Toolbar {
 
 
   logOut() {
-
+    this.auth.logout();
   }
 }

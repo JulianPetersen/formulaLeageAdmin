@@ -13,6 +13,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Header } from '../../../../shared/header/header';
 import { Toolbar } from '../../../../shared/toolbar/toolbar';
 import { MenuLateral } from '../../../../shared/menu-lateral/menu-lateral';
+import { AuthService } from '../../../../services/auth';
 
 
 @Component({
@@ -83,7 +84,8 @@ public editorConfig = {
 constructor(
   private fb: FormBuilder,
   private route: ActivatedRoute,
-  private blogService: BlogService
+  private blogService: BlogService,
+  private auth:AuthService
 ) {
 
   this.form = this.fb.group({

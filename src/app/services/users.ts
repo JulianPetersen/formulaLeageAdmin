@@ -34,5 +34,14 @@ getUsers(page: number = 1, limit: number = 10, search: string = '') {
 }
 
 
- 
+ getUserById() {
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      'authorization': `Bearer ${token}` || '',
+    });
+
+
+  return this.http.get<PaginatedUsers>(`${this.global.api}/api/user/getUserById`, {headers},);
+}
+
 }

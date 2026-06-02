@@ -1,0 +1,56 @@
+<div class="contents">
+    <div class="contenedor">
+        <div class="news-page">
+
+            <div class="news-header">
+
+                <div class="news-tag">
+                    F1 NEWS
+                </div>
+
+                <h1>
+                    {{ news?.title }}
+                </h1>
+
+                <p class="summary">
+                    {{ news?.summary }}
+                </p>
+
+                <div class="meta">
+                    {{ news?.createdAt }}
+                </div>
+
+            </div>
+
+            <div class="content" [innerHTML]="news?.content"></div>
+<!-- 
+            <div class="share-box">
+
+                <h3>Compartir noticia</h3>
+
+                <button>
+                    Compartir
+                </button>
+
+            </div> -->
+
+            <div class="cta">
+
+                <h2>🏁 Formula League</h2>
+
+                <p>
+                    Participá en los pronósticos y competí
+                    contra miles de fanáticos de la F1.
+                </p>
+
+                <button>
+                    <a href="https://play.google.com/store/apps/details?id=com.frigg.formulaleague2">
+                    Hacer mi pronóstico
+                </a>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
