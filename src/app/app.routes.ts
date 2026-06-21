@@ -24,4 +24,5 @@ export const routes: Routes = [
      { path: 'termsandcondtions', loadComponent: () => import('./pages/terms-conditions/terms-conditions').then(m => m.TermsConditions) },
      { path: 'reset-password', loadComponent: () => import('./pages/reser-password/reser-password').then(m => m.ReserPassword) },
      { path: 'news/:slug', loadComponent: () => import('./pages/news-detail/news-detail').then(m => m.NewsDetail) },
+     { path: 'analitica', loadComponent: () => import('./pages/analitica/analitica').then(m => m.Analitica) },
 ];

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Toolbar } from "../../shared/toolbar/toolbar";
 import { AuthService } from '../../services/auth';
 import { UsersService } from '../../services/users';
+import { GlobalService } from '../../services/global-service';
 
 @Component({
   selector: 'app-admin',
@@ -24,10 +25,14 @@ export class Admin {
   ]
 
 
-  constructor( private user:UsersService, private auth:AuthService){
+  constructor( private user:UsersService, private auth:AuthService,private global:GlobalService){
      this.getInfoUser()
+     
   }
 
+  ngOnInit(){
+    this.getVisitsPage()
+  }
 
   getInfoUser(){
     this.user.getUserById()
@@ -40,6 +45,19 @@ export class Admin {
           if(err.status == 401){  
             this.auth.logout()
           }
+        }
+      })
+  }
+
+
+  getVisitsPage(){
+    this.global.getVisitsPage('HOME')
+      .subscribe({
+        next: ((res) => {
+          console.log(res)
+        }),
+        error : (err)  => {
+          console.log(err)
         }
       })
   }
