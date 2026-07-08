@@ -1,0 +1,176 @@
+<app-header />
+<app-toolbar />
+
+<div class="content">
+  <app-menu-lateral [ngClass]="" />
+
+  <div class="contenedor">
+    <section class="wallet-header">
+      <div>
+        <span>Billetera</span>
+        <h1>Gestión de cobros</h1>
+      </div>
+
+      <button mat-stroked-button color="primary" (click)="getClaims()">
+        <mat-icon>refresh</mat-icon>
+        Actualizar
+      </button>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <p>Solicitado</p>
+        <strong>{{ formatMoney(totalRequested) }}</strong>
+      </div>
+
+      <div class="stat-card warning">
+        <p>Pendiente</p>
+        <strong>{{ formatMoney(totalPending) }}</strong>
+      </div>
+
+      <div class="stat-card info">
+        <p>Aprobado</p>
+        <strong>{{ formatMoney(totalApproved) }}</strong>
+      </div>
+
+      <div class="stat-card success">
+        <p>Pagado</p>
+        <strong>{{ formatMoney(totalPaid) }}</strong>
+      </div>
+    </section>
+
+    <mat-card class="claims-panel">
+      <div class="panel-toolbar">
+        <div>
+          <h2>Pedidos de cobro</h2>
+          <p>{{ claims.length }} solicitudes encontradas</p>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyFilter()">
+            @for (option of statusOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (error) {
+      <div class="error-state">{{ error }}</div>
+      }
+
+      @if (loading) {
+      <div class="loading-state">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+      } @else if (!claims.length) {
+      <div class="empty-state">
+        <h3>No hay solicitudes para este filtro</h3>
+      </div>
+      } @else {
+      <div class="claims-list">
+        @for (claim of claims; track claim._id) {
+        <article class="claim-row" [class.is-updating]="updatingId === claim._id">
+          <div class="claim-main">
+            <div class="amount-block">
+              <strong>{{ formatMoney(claim.amount, claim.currency) }}</strong>
+              <mat-chip [class]="'status-' + claim.status">
+                {{ statusLabel(claim.status) }}
+              </mat-chip>
+            </div>
+
+            <div class="user-block">
+              <h3>{{ claim.user.username || 'Usuario sin nombre' }}</h3>
+              <p>{{ claim.user.email || 'Sin email' }}</p>
+              <span>{{ claim.user.points || 0 }} puntos</span>
+            </div>
+
+            <div class="payment-block">
+              <p>{{ methodLabel(claim.method) }}</p>
+              <strong>{{ claim.accountAlias }}</strong>
+              @if (claim.note) {
+              <span>{{ claim.note }}</span>
+              }
+            </div>
+
+            <div class="date-block">
+              <p>Solicitado</p>
+              <strong>{{ claim.requestedAt || claim.createdAt | date:'dd/MM/yyyy HH:mm' }}</strong>
+            </div>
+          </div>
+
+          <div class="wallet-detail">
+            <div>
+              <span>Disponible</span>
+              <strong>{{ formatMoney(claim.wallet.balance, claim.wallet.currency) }}</strong>
+            </div>
+
+            <div>
+              <span>En revisión</span>
+              <strong>{{ formatMoney(claim.wallet.pendingBalance, claim.wallet.currency) }}</strong>
+            </div>
+
+            <div>
+              <span>Total ganado</span>
+              <strong>{{ formatMoney(claim.wallet.totalEarned, claim.wallet.currency) }}</strong>
+            </div>
+
+            <div>
+              <span>Total pagado</span>
+              <strong>{{ formatMoney(claim.wallet.totalPaid, claim.wallet.currency) }}</strong>
+            </div>
+          </div>
+
+          @if (claim.rejectedReason) {
+          <div class="rejected-reason">
+            <strong>Motivo de rechazo</strong>
+            <p>{{ claim.rejectedReason }}</p>
+          </div>
+          }
+
+          @if (canReject(claim)) {
+          <mat-form-field appearance="outline" class="reject-field">
+            <mat-label>Motivo de rechazo</mat-label>
+            <input matInput [(ngModel)]="rejectionReasons[claim._id]" />
+          </mat-form-field>
+          }
+
+          <div class="actions">
+            @if (canApprove(claim)) {
+            <button
+              mat-stroked-button
+              color="primary"
+              [disabled]="updatingId === claim._id"
+              (click)="updateStatus(claim, 'approved')">
+              Aprobar
+            </button>
+            }
+
+            @if (canPay(claim)) {
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="updatingId === claim._id"
+              (click)="updateStatus(claim, 'paid')">
+              Marcar pagado
+            </button>
+            }
+
+            @if (canReject(claim)) {
+            <button
+              mat-stroked-button
+              color="warn"
+              [disabled]="updatingId === claim._id"
+              (click)="updateStatus(claim, 'rejected')">
+              Rechazar
+            </button>
+            }
+          </div>
+        </article>
+        }
+      </div>
+      }
+    </mat-card>
+  </div>
+</div>

@@ -13,6 +13,7 @@ export const routes: Routes = [
     { path: 'races', canActivate: [authGuard], loadComponent: () => import('./pages/races/races').then(c => c.Races) },
     { path: 'blog', canActivate: [authGuard], loadComponent: () => import('./pages/blog/blog').then(c => c.Blog) },
     { path: 'prizes', canActivate: [authGuard], loadComponent: () => import('./pages/prizes-page/prizes-page').then(c => c.PrizesPage) },
+    { path: 'wallet', canActivate: [authGuard], loadComponent: () => import('./pages/wallet/wallet').then(c => c.Wallet) },
     { path: 'users-admin', canActivate: [authGuard], loadComponent: () => import('./pages/admin-users/admin-users').then(c => c.AdminUSers) },
     { path: 'list-news', canActivate: [authGuard], loadComponent: () => import('./pages/blog/components/list-news/list-news').then(c => c.ListNews) },
     { path: 'edit-news/:id', canActivate: [authGuard], loadComponent: () => import('./pages/blog/components/edit-news/edit-news').then(c => c.EditNews) },
