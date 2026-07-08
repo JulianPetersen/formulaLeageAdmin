@@ -50,7 +50,7 @@ export class ReserPassword {
 
         // 🔥 redirigir a login
         setTimeout(() => {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/home']);
         }, 2000);
       },
       error: (err) => {
