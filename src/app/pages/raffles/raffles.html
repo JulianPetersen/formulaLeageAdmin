@@ -1,0 +1,287 @@
+<app-header />
+<app-toolbar />
+
+<div class="content">
+  <app-menu-lateral [ngClass]="" />
+
+  <div class="contenedor">
+    <section class="raffles-header">
+      <div>
+        <span>RM coins</span>
+        <h1>Gestion de sorteos</h1>
+      </div>
+
+      <button mat-stroked-button color="primary" (click)="getRaffles()">
+        <mat-icon>refresh</mat-icon>
+        Actualizar
+      </button>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <p>Total</p>
+        <strong>{{ allRaffles.length }}</strong>
+      </div>
+
+      <div class="stat-card success">
+        <p>Activos</p>
+        <strong>{{ activeCount }}</strong>
+      </div>
+
+      <div class="stat-card warning">
+        <p>Borradores</p>
+        <strong>{{ draftCount }}</strong>
+      </div>
+
+      <div class="stat-card info">
+        <p>Tickets vendidos</p>
+        <strong>{{ ticketsSold }}</strong>
+      </div>
+
+      <div class="stat-card claim">
+        <p>Reclamados</p>
+        <strong>{{ claimedCount }}</strong>
+      </div>
+    </section>
+
+    <mat-card class="raffle-form-card">
+      <div class="panel-title">
+        <div>
+          <h2>{{ editingRaffleId ? 'Editar sorteo' : 'Nuevo sorteo' }}</h2>
+          <p>Configura el premio, costo en RM coins y ventana de participacion.</p>
+        </div>
+
+        @if (editingRaffleId) {
+        <button mat-stroked-button color="primary" (click)="cancelEdit()">
+          Cancelar edicion
+        </button>
+        }
+      </div>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Titulo</mat-label>
+          <input matInput [(ngModel)]="form.title" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Premio</mat-label>
+          <input matInput [(ngModel)]="form.prizeName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Costo por ticket</mat-label>
+          <input matInput type="number" min="1" [(ngModel)]="form.costPerTicket" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select [(ngModel)]="form.status">
+            @for (option of formStatusOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Inicio</mat-label>
+          <input matInput type="datetime-local" [(ngModel)]="form.startsAt" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cierre</mat-label>
+          <input matInput type="datetime-local" [(ngModel)]="form.endsAt" />
+        </mat-form-field>
+
+        <div class="image-field wide">
+          <div class="image-preview">
+            @if (imagePreview) {
+            <img [src]="imagePreview" alt="Imagen del sorteo" />
+            } @else {
+            <mat-icon>image</mat-icon>
+            }
+          </div>
+
+          <div class="image-controls">
+            <span>Imagen del sorteo</span>
+            <label class="file-button">
+              <mat-icon>upload</mat-icon>
+              Subir imagen
+              <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+            </label>
+            @if (selectedImage) {
+            <p>{{ selectedImage.name }}</p>
+            } @else if (imagePreview) {
+            <p>Imagen actual del sorteo</p>
+            } @else {
+            <p>PNG, JPG, WEBP o SVG</p>
+            }
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="wide">
+          <mat-label>Descripcion</mat-label>
+          <textarea matInput rows="3" [(ngModel)]="form.description"></textarea>
+        </mat-form-field>
+
+        <mat-checkbox [(ngModel)]="form.featured">Destacar en la app</mat-checkbox>
+      </div>
+
+      @if (error) {
+      <div class="error-state">{{ error }}</div>
+      }
+
+      <div class="form-actions">
+        <button mat-flat-button color="primary" [disabled]="saving" (click)="saveRaffle()">
+          <mat-icon>{{ editingRaffleId ? 'save' : 'add' }}</mat-icon>
+          {{ editingRaffleId ? 'Guardar cambios' : 'Crear sorteo' }}
+        </button>
+      </div>
+    </mat-card>
+
+    <mat-card class="raffles-panel">
+      <div class="panel-toolbar">
+        <div>
+          <h2>Listado de sorteos</h2>
+          <p>{{ raffles.length }} registros encontrados</p>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyFilter()">
+            @for (option of statusOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (error) {
+      <div class="error-state">{{ error }}</div>
+      }
+
+      @if (loading) {
+      <div class="loading-state">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+      } @else if (!raffles.length) {
+      <div class="empty-state">
+        <h3>No hay sorteos para este filtro</h3>
+      </div>
+      } @else {
+      <div class="raffles-list">
+        @for (raffle of raffles; track raffle._id) {
+        <article class="raffle-row" [class.is-updating]="updatingId === raffle._id">
+          <div class="raffle-main">
+            <div class="prize-thumb">
+              @if (raffle.image) {
+              <img [src]="raffle.image" [alt]="raffle.prizeName" />
+              } @else {
+              <mat-icon>confirmation_number</mat-icon>
+              }
+            </div>
+
+            <div class="raffle-copy">
+              <div class="title-line">
+                <h3>{{ raffle.title }}</h3>
+                <mat-chip [class]="'status-' + raffle.status">{{ statusLabel(raffle.status) }}</mat-chip>
+                @if (raffle.featured) {
+                <mat-chip class="featured-chip">Destacado</mat-chip>
+                }
+              </div>
+              <p>{{ raffle.prizeName }}</p>
+              @if (raffle.description) {
+              <span>{{ raffle.description }}</span>
+              }
+            </div>
+
+            <div class="raffle-metrics">
+              <div>
+                <span>Costo</span>
+                <strong>{{ raffle.costPerTicket }} RM</strong>
+              </div>
+              <div>
+                <span>Tickets</span>
+                <strong>{{ raffle.ticketsSold || 0 }}</strong>
+              </div>
+              <div>
+                <span>Cierre</span>
+                <strong>{{ raffle.endsAt | date:'dd/MM/yyyy HH:mm' }}</strong>
+              </div>
+            </div>
+          </div>
+
+          @if (raffle.winner) {
+          <div class="winner-row" [class.claimed-prize]="getClaimStatus(raffle) === 'claimed'">
+            <div>
+              <strong>Ganador</strong>
+              <span>
+                {{ raffle.winner.username || raffle.winner.email }}
+                @if (raffle.winningTicket) {
+                - Ticket #{{ raffle.winningTicket.ticketNumber }}
+                }
+              </span>
+            </div>
+
+            <div class="claim-info">
+              <mat-chip [class]="'claim-' + getClaimStatus(raffle)">{{ claimLabel(raffle) }}</mat-chip>
+              <small>{{ claimDetail(raffle) }}</small>
+              @if (raffle.claimedAt) {
+              <small>Reclamado: {{ raffle.claimedAt | date:'dd/MM/yyyy HH:mm' }}</small>
+              }
+            </div>
+          </div>
+          }
+
+          <div class="actions">
+            <button mat-stroked-button color="primary" [disabled]="updatingId === raffle._id" (click)="editRaffle(raffle)">
+              <mat-icon>edit</mat-icon>
+              Editar
+            </button>
+
+            @if (canActivate(raffle)) {
+            <button mat-stroked-button color="primary" [disabled]="updatingId === raffle._id" (click)="updateStatus(raffle, 'active')">
+              Activar
+            </button>
+            }
+
+            @if (canClose(raffle)) {
+            <button mat-stroked-button color="primary" [disabled]="updatingId === raffle._id" (click)="updateStatus(raffle, 'closed')">
+              Cerrar
+            </button>
+            }
+
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="updatingId === raffle._id || !canDraw(raffle)"
+              [title]="drawDisabledReason(raffle)"
+              (click)="drawRaffle(raffle)">
+              <mat-icon>casino</mat-icon>
+              Sortear
+            </button>
+
+            @if (canDeliver(raffle)) {
+            <button
+              mat-flat-button
+              color="primary"
+              [class.claim-action]="getClaimStatus(raffle) === 'claimed'"
+              [disabled]="updatingId === raffle._id"
+              (click)="updateStatus(raffle, 'delivered')">
+              {{ getClaimStatus(raffle) === 'claimed' ? 'Marcar entregado' : 'Entregado' }}
+            </button>
+            }
+
+            @if (canCancel(raffle)) {
+            <button mat-stroked-button color="warn" [disabled]="updatingId === raffle._id" (click)="updateStatus(raffle, 'cancelled')">
+              Cancelar
+            </button>
+            }
+          </div>
+        </article>
+        }
+      </div>
+      }
+    </mat-card>
+  </div>
+</div>
