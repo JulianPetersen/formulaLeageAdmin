@@ -52,3 +52,18 @@ export interface RaffleDrawResponse {
     user?: RaffleUser;
   };
 }
+
+export interface RaffleParticipant {
+  user: RaffleUser;
+  ticketCount: number;
+  tickets: number[];
+  firstTicketAt?: string;
+  lastTicketAt?: string;
+}
+
+export interface RaffleParticipantsResponse {
+  raffle: Pick<RaffleModel, '_id' | 'title' | 'prizeName' | 'ticketsSold'>;
+  totalParticipants: number;
+  totalTickets: number;
+  participants: RaffleParticipant[];
+}

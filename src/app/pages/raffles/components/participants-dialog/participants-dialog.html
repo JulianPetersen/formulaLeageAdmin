@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Participantes</h2>
+
+<mat-dialog-content>
+  <div class="dialog-header">
+    <div>
+      <span>Sorteo</span>
+      <h3>{{ response?.raffle?.title || data.title }}</h3>
+      @if (response?.raffle?.prizeName) {
+      <p>{{ response?.raffle?.prizeName }}</p>
+      }
+    </div>
+
+    @if (response) {
+    <div class="summary">
+      <div>
+        <span>Participantes</span>
+        <strong>{{ response.totalParticipants }}</strong>
+      </div>
+      <div>
+        <span>Tickets</span>
+        <strong>{{ response.totalTickets }}</strong>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (loading) {
+  <div class="loading-state">
+    <mat-spinner diameter="36"></mat-spinner>
+  </div>
+  } @else if (error) {
+  <div class="error-state">{{ error }}</div>
+  } @else if (!participants.length) {
+  <div class="empty-state">
+    <mat-icon>confirmation_number</mat-icon>
+    <h3>Sin participantes</h3>
+    <p>Todavia no hay usuarios con tickets en este sorteo.</p>
+  </div>
+  } @else {
+  <div class="participants-list">
+    @for (participant of participants; track participant.user._id) {
+    <article class="participant-row">
+      <div class="user-block">
+        <div class="avatar">{{ userName(participant).slice(0, 1) }}</div>
+        <div>
+          <h4>{{ userName(participant) }}</h4>
+          @if (participant.user.email) {
+          <p>{{ participant.user.email }}</p>
+          }
+        </div>
+      </div>
+
+      <div class="ticket-count">
+        <span>Tickets</span>
+        <strong>{{ participant.ticketCount }}</strong>
+      </div>
+
+      <div class="tickets-list">
+        {{ ticketsLabel(participant) }}
+      </div>
+
+      @if (participant.lastTicketAt) {
+      <small>Ultima compra: {{ participant.lastTicketAt | date:'dd/MM/yyyy HH:mm' }}</small>
+      }
+    </article>
+    }
+  </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

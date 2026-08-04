@@ -1,32 +1,46 @@
-<mat-card class="track-card">
+<mat-card class="tracks-panel">
   @if (allTracks$ | async; as allTrack) {
-
-  @for (item of allTrack; track item._id) {
-
-  <div class="track-item">
-    <div class="avatar">
-      <img [src]="item.img" alt="" />
-    </div>
-
-    <div class="track-info">
-      <div class="name">{{ item.country }}</div>
-    </div>
-
-
-
-
-    <div class="track-actions">
-      <button (click)="editTrack(item)" mat-icon-button>
-        <mat-icon>edit</mat-icon>
-      </button>
-
-      <button mat-icon-button color="warn" (click)="deleteTrack(item._id)">
-        <mat-icon>delete</mat-icon>
-      </button>
+  <div class="panel-toolbar">
+    <div>
+      <h2>Listado de circuitos</h2>
+      <p>{{ allTrack.length }} registros cargados</p>
     </div>
   </div>
 
-  <mat-divider></mat-divider>
+  @if (!allTrack.length) {
+  <div class="empty-state">
+    <mat-icon>map</mat-icon>
+    <h3>No hay circuitos cargados</h3>
+  </div>
+  } @else {
+  <div class="tracks-grid">
+    @for (item of allTrack; track item._id) {
+    <article class="track-item">
+      <div class="track-image">
+        @if (item.img) {
+        <img [src]="item.img" [alt]="item.name" />
+        } @else {
+        <mat-icon>map</mat-icon>
+        }
+      </div>
+
+      <div class="track-info">
+        <span>{{ item.country }}</span>
+        <h3>{{ item.name }}</h3>
+      </div>
+
+      <div class="track-actions">
+        <button (click)="editTrack(item)" mat-icon-button aria-label="Editar circuito">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="warn" (click)="deleteTrack(item._id)" aria-label="Eliminar circuito">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </article>
+    }
+  </div>
   }
   }
 </mat-card>

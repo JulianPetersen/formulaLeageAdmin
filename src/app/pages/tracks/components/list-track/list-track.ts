@@ -1,13 +1,11 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { TracksModel } from '../../../../models/tracks';
 import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
-import { TeamsService } from '../../../../services/teams';
 import { GlobalService } from '../../../../services/global-service';
 import { MatDialog } from '@angular/material/dialog';
 import { TrackService } from '../../../../services/track-service';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
-import { MatDivider } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { UpdateTrack } from '../update-track/update-track';
@@ -17,7 +15,6 @@ import { UpdateTrack } from '../update-track/update-track';
     imports: [
     MatIcon,
     MatCard,
-    MatDivider,
     CommonModule,
     MatButtonModule
   ],
@@ -69,7 +66,8 @@ export class ListTrack {
   
     editTrack(track: TracksModel) {
       const dialog = this.dialog.open(UpdateTrack, {
-        width: '500px',
+        width: '560px',
+        maxWidth: '94vw',
         data: track
       });
     

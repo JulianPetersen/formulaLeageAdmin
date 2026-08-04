@@ -1,37 +1,49 @@
 <mat-card class="track-card">
+  <div class="panel-title">
+    <div>
+      <span>Editar circuito</span>
+      <h2>{{ data.name }}</h2>
+    </div>
+    <mat-icon>edit_road</mat-icon>
+  </div>
 
-    <h2>Actualizar circuito</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="track-form">
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" placeholder="Autodromo de Monza" />
+    </mat-form-field>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Pais</mat-label>
+      <input matInput formControlName="country" placeholder="Italia" />
+    </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full">
-            <mat-label>Nombre</mat-label>
-            <input matInput formControlName="name" placeholder="ingrese un nombre" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full">
-            <mat-label>País</mat-label>
-            <input matInput formControlName="country" placeholder="ingrese un pais" />
-        </mat-form-field>
-
-        <div class="upload-container">
-            <input type="file" (change)="onFileSelected($event)" />
-        </div>
-
+    <div class="upload-card">
+      <div class="preview">
         @if(preview) {
-        <div class="preview">
-            <img [src]="preview" />
-        </div>
+        <img [src]="preview" alt="Vista previa del circuito" />
+        } @else {
+        <mat-icon>map</mat-icon>
         }
+      </div>
 
-        <button mat-raised-button color="primary" [disabled]="loading">
-           Editar
-        </button>
+      <div class="upload-copy">
+        <strong>Imagen del circuito</strong>
+        <label class="file-button">
+          <mat-icon>upload</mat-icon>
+          Cambiar imagen
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+        </label>
+      </div>
+    </div>
 
-        @if(loading) {
-        <mat-progress-spinner diameter="30" mode="indeterminate" />
-        }
-
-    </form>
-
+    <button mat-flat-button color="primary" [disabled]="loading || form.invalid">
+      @if(loading) {
+      <mat-progress-spinner diameter="20" mode="indeterminate" />
+      } @else {
+      <mat-icon>save</mat-icon>
+      }
+      Guardar cambios
+    </button>
+  </form>
 </mat-card>

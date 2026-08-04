@@ -239,6 +239,11 @@
               Editar
             </button>
 
+            <button mat-stroked-button color="primary" [disabled]="updatingId === raffle._id" (click)="openParticipants(raffle)">
+              <mat-icon>groups</mat-icon>
+              Ver participantes
+            </button>
+
             @if (canActivate(raffle)) {
             <button mat-stroked-button color="primary" [disabled]="updatingId === raffle._id" (click)="updateStatus(raffle, 'active')">
               Activar

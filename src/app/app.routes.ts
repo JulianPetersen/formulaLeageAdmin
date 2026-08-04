@@ -15,6 +15,7 @@ export const routes: Routes = [
     { path: 'prizes', canActivate: [authGuard], loadComponent: () => import('./pages/prizes-page/prizes-page').then(c => c.PrizesPage) },
     { path: 'raffles', canActivate: [authGuard], loadComponent: () => import('./pages/raffles/raffles').then(c => c.Raffles) },
     { path: 'wallet', canActivate: [authGuard], loadComponent: () => import('./pages/wallet/wallet').then(c => c.Wallet) },
+    { path: 'push-notifications', canActivate: [authGuard], loadComponent: () => import('./pages/push-notifications/push-notifications').then(c => c.PushNotifications) },
     { path: 'users-admin', canActivate: [authGuard], loadComponent: () => import('./pages/admin-users/admin-users').then(c => c.AdminUSers) },
     { path: 'list-news', canActivate: [authGuard], loadComponent: () => import('./pages/blog/components/list-news/list-news').then(c => c.ListNews) },
     { path: 'edit-news/:id', canActivate: [authGuard], loadComponent: () => import('./pages/blog/components/edit-news/edit-news').then(c => c.EditNews) },

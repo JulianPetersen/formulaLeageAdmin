@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TrackService } from '../../../../services/track-service';
@@ -13,6 +14,7 @@ import { TrackService } from '../../../../services/track-service';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    MatIconModule,
     MatProgressSpinnerModule],
   templateUrl: './create-track.html',
   styleUrl: './create-track.scss',

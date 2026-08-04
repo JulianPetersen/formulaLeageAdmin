@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GlobalService } from './global-service';
-import { RaffleDrawResponse, RaffleModel, RaffleStatus } from '../models/raffle';
+import { RaffleDrawResponse, RaffleModel, RaffleParticipantsResponse, RaffleStatus } from '../models/raffle';
 
 @Injectable({
   providedIn: 'root',
@@ -51,6 +51,13 @@ export class RafflesService {
     return this.http.post<RaffleDrawResponse>(
       `${this.global.api}/api/raffles/${id}/draw`,
       {},
+      { headers: this.getHeaders() }
+    );
+  }
+
+  getParticipants(id: string) {
+    return this.http.get<RaffleParticipantsResponse>(
+      `${this.global.api}/api/raffles/${id}/participants`,
       { headers: this.getHeaders() }
     );
   }

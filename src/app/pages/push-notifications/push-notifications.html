@@ -1,0 +1,63 @@
+<app-header />
+<app-toolbar />
+
+<div class="content">
+  <app-menu-lateral [ngClass]="" />
+
+  <div class="contenedor">
+    <section class="push-header">
+      <div>
+        <span>Firebase</span>
+        <h1>Enviar push</h1>
+      </div>
+    </section>
+
+    <mat-card class="push-card">
+      <div class="panel-title">
+        <div>
+          <h2>Nueva notificacion</h2>
+          <p>Se enviara al topic general de noticias configurado en la app.</p>
+        </div>
+        <mat-icon>notifications_active</mat-icon>
+      </div>
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Titulo</mat-label>
+          <input matInput maxlength="80" [(ngModel)]="title" />
+          <mat-hint align="end">{{ title.length }}/80</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mensaje</mat-label>
+          <textarea matInput rows="4" maxlength="180" [(ngModel)]="body"></textarea>
+          <mat-hint align="end">{{ body.length }}/180</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data JSON opcional</mat-label>
+          <textarea matInput rows="5" placeholder='{"screen":"news"}' [(ngModel)]="dataText"></textarea>
+        </mat-form-field>
+      </div>
+
+      @if (error) {
+      <div class="error-state">{{ error }}</div>
+      }
+
+      @if (success) {
+      <div class="success-state">{{ success }}</div>
+      }
+
+      <div class="form-actions">
+        <button mat-flat-button color="primary" [disabled]="!canSend" (click)="sendPush()">
+          @if (loading) {
+          <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+          <mat-icon>send</mat-icon>
+          }
+          Enviar push
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

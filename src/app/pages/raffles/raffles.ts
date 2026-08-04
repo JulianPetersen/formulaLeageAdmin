@@ -8,6 +8,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { Header } from '../../shared/header/header';
@@ -16,6 +17,7 @@ import { Toolbar } from '../../shared/toolbar/toolbar';
 import { RaffleModel, RaffleStatus } from '../../models/raffle';
 import { GlobalService } from '../../services/global-service';
 import { RafflesService } from '../../services/raffles-service';
+import { ParticipantsDialog } from './components/participants-dialog/participants-dialog';
 
 type RaffleFilterStatus = RaffleStatus | 'all';
 
@@ -74,6 +76,7 @@ export class Raffles {
   constructor(
     private rafflesService: RafflesService,
     private global: GlobalService,
+    private dialog: MatDialog,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -183,20 +186,25 @@ export class Raffles {
     this.cdr.detectChanges();
   }
 
-  onImageSelected(event: Event) {
+  async onImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
 
     if (!file) return;
 
-    this.selectedImage = file;
+    try {
+      this.selectedImage = await this.compressImage(file);
+    } catch (error) {
+      this.error = 'No pudimos procesar la imagen seleccionada';
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result as string;
       this.cdr.detectChanges();
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(this.selectedImage);
   }
 
   updateStatus(raffle: RaffleModel, status: RaffleStatus) {
@@ -236,6 +244,17 @@ export class Raffles {
           this.cdr.detectChanges();
         },
       });
+    });
+  }
+
+  openParticipants(raffle: RaffleModel) {
+    this.dialog.open(ParticipantsDialog, {
+      data: {
+        raffleId: raffle._id,
+        title: raffle.title,
+      },
+      width: '820px',
+      maxWidth: '94vw',
     });
   }
 
@@ -347,5 +366,64 @@ export class Raffles {
     const date = new Date(value);
     const offset = date.getTimezoneOffset() * 60000;
     return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+  }
+
+  private async compressImage(file: File) {
+    if (file.type === 'image/svg+xml' || file.size <= 850 * 1024) {
+      return file;
+    }
+
+    const image = await this.loadImage(file);
+    const canvas = document.createElement('canvas');
+    const maxWidth = 1200;
+    const scale = Math.min(1, maxWidth / image.width);
+
+    canvas.width = Math.round(image.width * scale);
+    canvas.height = Math.round(image.height * scale);
+
+    const context = canvas.getContext('2d');
+    if (!context) return file;
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+    let blob: Blob | null = null;
+
+    for (const quality of [0.82, 0.72, 0.62, 0.52]) {
+      blob = await this.canvasToBlob(canvas, 'image/jpeg', quality);
+      if (blob && blob.size <= 850 * 1024) break;
+    }
+
+    if (!blob || blob.size >= file.size) {
+      return file;
+    }
+
+    return new File(
+      [blob],
+      file.name.replace(/\.[^/.]+$/, '.jpg'),
+      { type: 'image/jpeg' }
+    );
+  }
+
+  private loadImage(file: File): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      const url = URL.createObjectURL(file);
+
+      image.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(image);
+      };
+      image.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('Invalid image'));
+      };
+      image.src = url;
+    });
+  }
+
+  private canvasToBlob(canvas: HTMLCanvasElement, type: string, quality: number): Promise<Blob | null> {
+    return new Promise((resolve) => {
+      canvas.toBlob(resolve, type, quality);
+    });
   }
 }

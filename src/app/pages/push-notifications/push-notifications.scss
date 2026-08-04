@@ -1,0 +1,118 @@
+.content {
+  width: 100%;
+  display: flex;
+  height: 100vh;
+  background: #f5f7fb;
+}
+
+.contenedor {
+  width: 100%;
+  display: grid;
+  align-content: start;
+  flex: 1;
+  gap: 18px;
+  padding: 24px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.push-header,
+.panel-title,
+.form-actions {
+  display: flex;
+  align-items: center;
+}
+
+.push-header,
+.panel-title {
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.push-header span {
+  color: #d4a500;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.push-header h1,
+.panel-title h2 {
+  margin: 0;
+  color: #151922;
+}
+
+.push-header h1 {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.panel-title p {
+  margin: 4px 0 0;
+  color: #6d7480;
+}
+
+.panel-title mat-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 8px;
+  background: #151922;
+  color: #fff;
+}
+
+.push-card {
+  width: min(100%, 760px);
+  border-radius: 8px;
+  padding: 22px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.error-state,
+.success-state {
+  border-radius: 8px;
+  font-weight: 700;
+  margin-top: 12px;
+  padding: 12px 14px;
+}
+
+.error-state {
+  background: #fff1f1;
+  color: #b42318;
+}
+
+.success-state {
+  background: #e9f8ef;
+  color: #087443;
+}
+
+.form-actions {
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.form-actions button {
+  min-width: 150px;
+}
+
+.form-actions mat-spinner {
+  margin-right: 8px;
+}
+
+@media (max-width: 720px) {
+  .contenedor {
+    padding: 16px;
+  }
+
+  .push-header,
+  .panel-title {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
