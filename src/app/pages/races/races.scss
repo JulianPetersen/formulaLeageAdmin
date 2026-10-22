@@ -1,20 +1,9 @@
-.content {
-  width: 100%;
-  display: flex;
-  height: 100vh;
-  background-color: rgb(241, 241, 241);
-
-
-  .contenedor {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    .component{
-      margin:20px
-    }
-  }
-
+.content { display: flex; height: 100vh; background: #f5f7fb; }
+.contenedor {
+  flex: 1; min-width: 0; padding: 24px; overflow-y: auto;
+  display: grid; grid-template-columns: minmax(320px, 520px) minmax(0, 1fr);
+  gap: 24px; align-items: start;
 }
+app-create-race, app-list-races-component { min-width: 0; }
+@media (max-width: 1200px) { .contenedor { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .contenedor { padding: 12px; } }

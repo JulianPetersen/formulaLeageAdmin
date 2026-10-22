@@ -1,45 +1,39 @@
 <mat-card class="card">
-
-  @for (race of races$ | async; track race._id) {
-  <mat-card class="race-card">
-
-    <div class="row">
-      <div>
-        <h3>{{ race.name }}</h3>
-        <p>{{ race.circuit?.name || race.circuit }}</p>
-        <p>{{ race.date | date:'dd/MM/yyyy HH:mm' }}</p>
-      </div>
-
-      <mat-chip [color]="
-            race.status === 'proximamente' ? 'primary' :
-            race.status === 'cerrada' ? 'warn' :
-            'accent'
-          " selected>
-        {{ race.status }}
-      </mat-chip>
-    </div>
-
-    <div class="actions">
-      @if (race.status === 'proximamente') {
-      <button mat-stroked-button color="warn" (click)="changeStatusToLista(race._id)">
-        Pasar a Lista
-      </button>
-      }
-
-            <button (click)="editRace(race)" mat-icon-button>
-        <mat-icon>edit</mat-icon>
-      </button>
-    </div>
-
-    <div class="actions">
-      @if (race.status === 'lista') {
-      <button mat-stroked-button color="warn" (click)="closeRace(race)">
-        cerrar carrera
-      </button>
-      }
-    </div>
-
-  </mat-card>
-  }
-
+  <div class="row">
+    <h2>Carreras</h2>
+    <button mat-button (click)="refresh()">Actualizar</button>
+  </div>
+  @if (error) { <p class="error" role="alert">{{ error }}</p> }
+  @if (races$ | async; as races) {
+    @if (!races.length && !error) { <p>No hay carreras cargadas.</p> }
+    @for (race of races; track race._id) {
+      <mat-card class="race-card">
+        <div class="row">
+          <div>
+            <h3>{{ race.name }}</h3>
+            <p>{{ race.circuit?.name || race.circuit }}</p>
+            <p>{{ race.date | date:'dd/MM/yyyy HH:mm' }}</p>
+          </div>
+          <mat-chip>{{ race.status }}</mat-chip>
+        </div>
+        <app-race-extras-summary [race]="race" />
+        <div class="actions">
+          @if (race.status === 'proximamente') {
+            <button mat-stroked-button [disabled]="!!updatingId" (click)="changeStatusToLista(race)">
+              {{ updatingId === race._id ? 'Abriendo…' : 'Abrir pronósticos' }}
+            </button>
+          }
+          <button (click)="editRace(race)" [disabled]="!!updatingId" mat-icon-button aria-label="Editar carrera">
+            <mat-icon>edit</mat-icon>
+          </button>
+          @if (hasExtras(race) && race.status !== 'proximamente') {
+            <button mat-stroked-button [disabled]="!!updatingId" (click)="extraResults(race)">Resultados extra</button>
+          }
+          @if (race.status === 'lista') {
+            <button mat-flat-button [disabled]="!!updatingId" (click)="closeRace(race)">Cerrar carrera</button>
+          }
+        </div>
+      </mat-card>
+    }
+  } @else { <p role="status">Cargando carreras…</p> }
 </mat-card>

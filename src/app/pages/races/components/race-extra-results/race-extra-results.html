@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>Resultados extra · {{ data.name }}</h2>
+<mat-dialog-content>
+  <p>Guardá cada resultado cuando termine su plazo. Anular deja ese extra y su bonus en cero puntos.</p>
+  @if (data.status !== 'lista') {
+    <p class="notice">Los resultados sólo se pueden modificar mientras la carrera está abierta.</p>
+  }
+  <div [formGroup]="form">
+    @for (extra of extras; track extra.key) {
+      @if (data.extras?.[extra.key]?.enabled) {
+        <section [formGroupName]="extra.key">
+          <h3>{{ extra.label }}</h3>
+          <p class="hint">Cierre: {{ data.extras[extra.key].cutoff | date:'dd/MM/yyyy HH:mm' }}</p>
+          @if (data.status === 'lista' && !canEdit(extra.key)) {
+            <p class="notice">Disponible para cargar después del cierre de este extra.</p>
+          }
+          <mat-form-field appearance="outline">
+            <mat-label>Estado del resultado</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="pending" disabled>Pendiente</mat-option>
+              <mat-option value="resolved">Resuelto</mat-option>
+              <mat-option value="void">Anulado</mat-option>
+            </mat-select>
+          </mat-form-field>
+          @if (form.get(extra.key + '.status')?.value === 'resolved') {
+            <mat-form-field appearance="outline">
+              <mat-label>{{ extra.key === 'safetyCar' ? '¿Hubo Safety Car? (sin VSC)' : 'Piloto ganador' }}</mat-label>
+              <mat-select formControlName="value">
+                @if (extra.key === 'safetyCar') {
+                  <mat-option [value]="true">Sí</mat-option>
+                  <mat-option [value]="false">No</mat-option>
+                } @else {
+                  @for (pilot of availablePilots(extra.key); track pilot._id) {
+                    <mat-option [value]="pilot._id">{{ pilot.name }}</mat-option>
+                  }
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+          @if (data.status === 'lista') {
+            <button mat-stroked-button type="button" (click)="save(extra.key)"
+              [disabled]="!!saving || blocked || !canEdit(extra.key) || !validResult(extra.key)">
+              {{ saving === extra.key ? 'Guardando…' : 'Guardar ' + extra.label }}
+            </button>
+          }
+        </section>
+      }
+    }
+  </div>
+  @if (error) { <p class="error" role="alert">{{ error }}</p> }
+  @if (success) { <p class="success" role="status">{{ success }}</p> }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [disabled]="!!saving" (click)="dialogRef.close('refresh')">
+    {{ blocked ? 'Volver y actualizar listado' : 'Volver a carreras' }}
+  </button>
+</mat-dialog-actions>

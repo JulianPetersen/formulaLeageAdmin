@@ -1,0 +1,39 @@
+<section [formGroup]="form">
+  <h3>Predicciones extra</h3>
+  <p class="hint">Son opcionales. Cada extra tiene sus propios puntos y horario de cierre.</p>
+  <div formGroupName="extras">
+    @for (extra of extras; track extra.key) {
+      <div class="extra" [formGroupName]="extra.key">
+        <mat-checkbox formControlName="enabled">{{ extra.label }}</mat-checkbox>
+        <p class="hint">{{ extra.description }}</p>
+        @if (form.get('extras.' + extra.key + '.enabled')?.value) {
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label>Puntos por acierto</mat-label>
+              <input matInput type="number" min="1" step="1" formControlName="points" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Pronósticos hasta</mat-label>
+              <input matInput type="datetime-local" step="1" formControlName="cutoff"
+                [max]="form.get('date')?.value" />
+            </mat-form-field>
+          </div>
+          @if (extra.key === 'duel') {
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>Dos pilotos para el duelo</mat-label>
+              <mat-select multiple formControlName="pilots">
+                @for (pilot of selectedPilots; track pilot._id) {
+                  <mat-option [value]="pilot._id">{{ pilot.name }}</mat-option>
+                }
+              </mat-select>
+              <mat-hint>Seleccioná exactamente dos pilotos de la carrera.</mat-hint>
+            </mat-form-field>
+          }
+        }
+      </div>
+    }
+  </div>
+  <mat-checkbox formControlName="confidenceEnabled">Comodín de confianza</mat-checkbox>
+  <p class="hint">Duplica los puntos de un extra elegido por el usuario si acierta.
+    Se puede elegir hasta el primer cierre de los extras habilitados.</p>
+</section>

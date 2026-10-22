@@ -1,0 +1,13 @@
+<div class="extras">
+  @for (extra of extras; track extra.key) {
+    @if (race.extras?.[extra.key]?.enabled) {
+      <div class="extra">
+        <strong>{{ extra.label }} · {{ race.extras[extra.key].points }} pts</strong>
+        <span>Cierra {{ race.extras[extra.key].cutoff | date:'dd/MM/yyyy HH:mm' }}</span>
+        @if (race.status !== 'proximamente') { <span>{{ resultLabel(extra.key) }}</span> }
+      </div>
+    }
+  }
+</div>
+@if (!hasExtras) { <p class="hint">Sin predicciones extra</p> }
+@if (race.confidenceEnabled) { <p class="hint">Comodín de confianza habilitado · bonus por acierto</p> }

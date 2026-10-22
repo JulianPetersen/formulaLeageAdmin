@@ -1,0 +1,8 @@
+section { border: 1px solid #dce1e8; border-radius: 12px; padding: 16px; margin: 16px 0; }
+h3 { margin: 0; }
+mat-form-field { width: 100%; }
+.hint { color: #596273; font-size: 13px; }
+.notice { color: #2448a7; background: #eef3ff; }
+.error { color: #b42318; background: #fff1f1; }
+.success { color: #087443; background: #e9f8ef; }
+.notice, .error, .success { padding: 12px; border-radius: 8px; }

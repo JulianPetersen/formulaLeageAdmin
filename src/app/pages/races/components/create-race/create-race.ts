@@ -1,96 +1,45 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { PilotsModel } from '../../../../models/pilots';
-import { TracksModel } from '../../../../models/tracks';
+import { RacePayload } from '../../../../models/race';
 import { RacesService } from '../../../../services/races-service';
-import { PilotsServices } from '../../../../services/pilots-services';
-import { TrackService } from '../../../../services/track-service';
-import { CommonModule } from '@angular/common';
-
-
+import { RaceForm } from '../race-form/race-form';
 
 @Component({
   selector: 'app-create-race',
-  imports: [    ReactiveFormsModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
-  CommonModule],
+  imports: [MatCardModule, RaceForm],
   templateUrl: './create-race.html',
   styleUrl: './create-race.scss',
 })
 export class CreateRace {
-  form!: FormGroup;
+  @ViewChild(RaceForm) raceForm!: RaceForm;
   loading = false;
+  blocked = false;
   error = '';
+  success = '';
 
-  pilots: PilotsModel[] = [];
-  tracks: TracksModel[] = [];
+  constructor(private racesService: RacesService, private cdr: ChangeDetectorRef) {}
 
-
-
-    constructor(
-    private fb: FormBuilder,
-    private racesService: RacesService,
-    private pilotsService: PilotsServices,
-    private tracksService: TrackService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      circuit: ['', Validators.required],
-      date: ['', Validators.required],
-      cutoff: [''],
-      pilots: [[], Validators.required],
-    });
-
-    this.loadData();
-  }
-
-  loadData() {
-    this.pilotsService.getAllPilots().subscribe(res => {
-      this.pilots = res;
-      this.cdr.detectChanges();
-    });
-
-    this.tracksService.getAllTracks().subscribe(res => {
-      this.tracks = res;
-      this.cdr.detectChanges();
-    });
-  }
-
-
-  submit() {
-    if (this.form.invalid) return;
-
+  submit(payload: Partial<RacePayload>) {
+    if (this.loading || this.blocked) return;
     this.loading = true;
     this.error = '';
-
-    // 🚨 Enviamos OBJETO PLANO, no FormData
-    this.racesService.createRace(this.form.value as any).subscribe({
-      next: (res) => {
+    this.success = '';
+    this.racesService.createRace(payload as RacePayload).subscribe({
+      next: () => {
         this.loading = false;
-        console.log(res)
-        this.racesService.notifyManagmentAdded()
-      },
-      error: (err) => {
-        this.loading = false;
-        this.error = err.error?.message || 'Error al crear la carrera';
+        this.success = 'Carrera creada. Revisá sus reglas antes de abrir los pronósticos.';
+        this.raceForm.reset();
+        this.racesService.notifyManagmentAdded();
         this.cdr.detectChanges();
-      }
+      },
+      error: err => {
+        this.loading = false;
+        this.blocked = err.status === 0 || err.status >= 500;
+        this.error = err.error?.message || 'No se pudo crear la carrera.';
+        if (this.blocked) this.error += ' Actualizá la página y revisá el listado antes de volver a crearla.';
+        this.racesService.notifyManagmentAdded();
+        this.cdr.detectChanges();
+      },
     });
   }
 }
-

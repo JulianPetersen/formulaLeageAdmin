@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:race-extras": "ng test --watch=false --ts-config=tsconfig.race-extras.spec.json --include=src/app/pages/races/race-extras.spec.ts"
   },
   "prettier": {
     "printWidth": 100,

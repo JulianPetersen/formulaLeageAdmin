@@ -1,15 +1,42 @@
-import { PilotsModel } from "./pilots";
-import { TracksModel } from "./tracks";
+import { PilotsModel } from './pilots';
+import { TracksModel } from './tracks';
+
+export type ExtraKey = 'pole' | 'duel' | 'safetyCar';
+export interface ExtraConfiguration {
+  enabled: boolean;
+  points: number;
+  cutoff?: string | Date;
+  pilots?: string[];
+}
+export interface ExtraResult {
+  status: 'pending' | 'resolved' | 'void';
+  value?: string | boolean;
+}
+export type RaceExtras = Partial<Record<ExtraKey, ExtraConfiguration>>;
+export type ExtraResults = Partial<Record<ExtraKey, ExtraResult>>;
+export interface RacePosition { pilot: string; position: number; }
 
 export interface RaceModel {
-    _id:string
+  _id: string;
+  name: string;
+  circuit: TracksModel;
+  date: string | Date;
+  pilots: PilotsModel[];
+  cutoff?: string | Date;
+  status: string;
+  result: RacePosition[];
+  extras?: RaceExtras;
+  extraResults?: ExtraResults;
+  confidenceEnabled?: boolean;
+  rulesLockedAt?: string | Date;
+}
 
-    name: string,
-    circuit: TracksModel,
-    date: Date,
-    pilots: PilotsModel[],
-    cutoff: Date,
-    status: string,
-    result: [],
-
+export interface RacePayload {
+  name: string;
+  circuit: string;
+  date: string;
+  cutoff: string | null;
+  pilots: string[];
+  extras: RaceExtras;
+  confidenceEnabled: boolean;
 }

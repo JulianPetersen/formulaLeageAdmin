@@ -1,78 +1,49 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GlobalService } from './global-service';
-import { RaceModel } from '../models/race';
-import { Observable, Subject } from 'rxjs';
+import { ExtraResults, RaceModel, RacePayload, RacePosition } from '../models/race';
+import { Subject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class RacesService {
-
-
-  constructor(private http: HttpClient, public global: GlobalService) { }
-
   private racesAddedSource = new Subject<void>();
-  racesAdded$ = this.racesAddedSource.asObservable(); // <-- observable público
+  racesAdded$ = this.racesAddedSource.asObservable();
 
+  constructor(private http: HttpClient, public global: GlobalService) {}
 
+  getToken(): string | null { return localStorage.getItem('token'); }
 
-  getToken(): string | null {
-
-    return localStorage.getItem('token');
+  private headers() {
+    return new HttpHeaders({ authorization: 'Bearer ' + this.getToken() });
   }
 
-
-  createRace(formData: FormData) {
-    const token = this.getToken();
-    const headers = new HttpHeaders({
-      'authorization': `Bearer ${token}` || '',
-    });
-    return this.http.post(`${this.global.api}/api/race`, formData, { headers });
+  createRace(data: RacePayload) {
+    return this.http.post<RaceModel>(this.global.api + '/api/race', data, { headers: this.headers() });
   }
 
   getAllRaces() {
-    const token = this.getToken();
-    const headers = new HttpHeaders({
-      'authorization': `Bearer ${token}` || '',
-    });
-    return this.http.get<RaceModel[]>(`${this.global.api}/api/race`, { headers });
+    return this.http.get<RaceModel[]>(this.global.api + '/api/race', { headers: this.headers() });
   }
 
-  closeRace(raceId: string, result: { pilot: string; position: number }[]) {
-    const token = this.getToken();
-
-    const headers = new HttpHeaders({
-      authorization: `Bearer ${token}`
-    });
-
-    return this.http.put(
-      `${this.global.api}/api/race/${raceId}/close`,
-      { result },
-      { headers }
-    );
+  closeRace(raceId: string, result: RacePosition[]) {
+    return this.http.put(this.global.api + '/api/race/' + raceId + '/close',
+      { result }, { headers: this.headers() });
   }
 
-  notifyManagmentAdded() {
-    this.racesAddedSource.next();
+  updateExtraResults(raceId: string, extraResults: ExtraResults) {
+    return this.http.put<RaceModel>(this.global.api + '/api/race/' + raceId + '/extras/results',
+      { extraResults }, { headers: this.headers() });
   }
 
-  updateRaceStatus(id: string, status: string): Observable<RaceModel> {
-    const token = this.getToken();
-    const headers = new HttpHeaders({
-      authorization: `Bearer ${token}`
-    });
+  notifyManagmentAdded() { this.racesAddedSource.next(); }
 
-    return this.http.patch<RaceModel>(`${this.global.api}/api/race/${id}`, { status },{ headers });
+  updateRaceStatus(id: string, status: string) {
+    return this.http.patch<RaceModel>(this.global.api + '/api/race/' + id,
+      { status }, { headers: this.headers() });
   }
 
-
-    updrateRace(id:string, data: RaceModel){
-      const token = this.getToken()
-      const headers = new HttpHeaders({
-        'authorization': `Bearer ${token}` || '',
-      });
-  
-      return this.http.patch(`${this.global.api}/api/race/${id}`,data,{ headers });
-    }
+  updrateRace(id: string, data: Partial<RacePayload>) {
+    return this.http.patch<RaceModel>(this.global.api + '/api/race/' + id,
+      data, { headers: this.headers() });
+  }
 }

@@ -1,0 +1,7 @@
+mat-form-field { width: 100%; }
+.dates { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.notice { background: #eef3ff; color: #2448a7; padding: 12px; border-radius: 8px; line-height: 1.5; }
+.hint { color: #596273; font-size: 13px; }
+.error { background: #fff1f1; color: #b42318; padding: 12px; border-radius: 8px; }
+button[type='submit'] { margin-top: 16px; }
+@media (max-width: 600px) { .dates { grid-template-columns: 1fr; gap: 0; } }

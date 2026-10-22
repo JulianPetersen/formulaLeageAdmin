@@ -1,0 +1,52 @@
+@if (form) {
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    @if (locked) {
+      <p class="notice">La carrera ya fue abierta. Sólo se pueden cambiar el nombre y el circuito.</p>
+    }
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Circuito</mat-label>
+      <mat-select formControlName="circuit">
+        @for (track of tracks; track track._id) {
+          <mat-option [value]="track._id">{{ track.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div class="dates">
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de carrera</mat-label>
+        <input matInput type="datetime-local" step="1" formControlName="date" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Cierre de posiciones (opcional)</mat-label>
+        <input matInput type="datetime-local" step="1" formControlName="cutoff" />
+      </mat-form-field>
+    </div>
+    <p class="hint">Los horarios se muestran en la zona local de este dispositivo.</p>
+    <mat-form-field appearance="outline">
+      <mat-label>Pilotos de la carrera</mat-label>
+      <mat-select multiple formControlName="pilots">
+        @for (pilot of pilots; track pilot._id) {
+          <mat-option [value]="pilot._id">{{ pilot.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <app-race-extras-config [form]="form" [pilots]="pilots" />
+    @if (form.touched && form.errors?.['rules']) {
+      <p class="error" role="alert">{{ form.errors?.['rules'] }}</p>
+    }
+    @if (loadError) {
+      <p class="error" role="alert">{{ loadError }}</p>
+      <button type="button" mat-button (click)="loadData()">Reintentar carga</button>
+    }
+    @if (error) { <p class="error" role="alert">{{ error }}</p> }
+    <button mat-flat-button type="submit"
+      [disabled]="saving || blocked || loading || !!loadError || form.invalid">
+      {{ saving ? 'Guardando…' : (race ? 'Guardar cambios' : 'Crear carrera') }}
+    </button>
+    @if (loading) { <p role="status">Cargando pilotos y circuitos…</p> }
+  </form>
+}

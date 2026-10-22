@@ -1,44 +1,40 @@
-<mat-card>
-  <h2>Cerrar carrera</h2>
-
-  <form [formGroup]="form">
-
+<h2 mat-dialog-title>Cerrar carrera · {{ data.name }}</h2>
+<mat-dialog-content>
+  <app-race-extras-summary [race]="data" />
+  @if (closeReason) { <p class="notice">{{ closeReason }}</p> }
+  <p>Revisá la clasificación completa. Al confirmar se calculan y suman los puntos de los pronósticos.</p>
+  <form [formGroup]="form" (ngSubmit)="submit()" id="close-race-form">
     <div formArrayName="result">
       @for (ctrl of resultArray.controls; track $index) {
         <div [formGroupName]="$index" class="row">
-
           <mat-form-field appearance="outline">
             <mat-label>Piloto</mat-label>
-            <mat-select formControlName="pilot" >
-              @for (p of data.pilots; track p._id) {
-                <mat-option [value]="p._id">
-                  {{ p.name }}
-                </mat-option>
+            <mat-select formControlName="pilot">
+              @for (pilot of data.pilots; track pilot._id) {
+                <mat-option [value]="pilot._id">{{ pilot.name }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
-
           <mat-form-field appearance="outline">
             <mat-label>Posición</mat-label>
-            <input matInput type="number" formControlName="position" />
+            <input matInput type="number" min="1" max="22" step="1" formControlName="position" />
           </mat-form-field>
-
         </div>
       }
     </div>
-
-    @if (error) {
-      <p class="error">{{ error }}</p>
-    }
-
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="submit()"
-      [disabled]="loading"
-    >
-      Confirmar resultado
-    </button>
-
+    <label class="confirmation">
+      <input type="checkbox" formControlName="confirmed" />
+      Revisé los resultados. Entiendo que el cierre no permite recalcular esta carrera.
+    </label>
+    @if (error) { <p class="error" role="alert">{{ error }}</p> }
   </form>
-</mat-card>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [disabled]="loading" (click)="dialogRef.close('refresh')">
+    {{ blocked ? 'Volver y actualizar listado' : 'Cancelar' }}
+  </button>
+  <button mat-flat-button type="submit" form="close-race-form"
+    [disabled]="loading || blocked || form.invalid || !!closeReason">
+    {{ loading ? 'Procesando…' : 'Cerrar y sumar puntos' }}
+  </button>
+</mat-dialog-actions>
